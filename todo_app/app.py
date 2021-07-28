@@ -3,7 +3,6 @@ import todo_app.data.session_items as session_items
 from todo_app.view_model import ViewModel
 from datetime import datetime, timedelta
 
-
 def create_app():
     app = Flask(__name__)
     app.config.from_object("todo_app.flask_config.Config")

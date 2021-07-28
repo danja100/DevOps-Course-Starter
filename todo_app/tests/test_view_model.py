@@ -14,7 +14,7 @@ def view_model():
     _DEFAULT_ITEMS = [
         {
             "idShort": 1,
-            "idList": os.getenv("LIST_ID_NOT_STARTED"),
+            "idList": os.getenv("LIST_ID_TO_DO"),
             "name": "To-Do items",
             "dateLastActivity": "2021-04-21T09:59:06.065Z",
         },

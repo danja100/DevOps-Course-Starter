@@ -39,6 +39,17 @@ Once the all dependencies have been installed, start the Flask app in developmen
 $ poetry run flask run
 ```
 
+## vagrant 
+
+ensure virtual box and vagrant are installed prior to runnig the 'vagrant up' command.
+virtual box - https://www.virtualbox.org/
+vagrant - https://www.vagrantup.com 
+
+to run this app using vagrant:
+'''
+$ vagrant up
+
+
 You should see output similar to the following:
 ```bash
  * Serving Flask app "app" (lazy loading)

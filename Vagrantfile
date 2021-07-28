@@ -1,47 +1,36 @@
-
 Vagrant.configure("2") do |config|
   config.vm.box = "hashicorp/bionic64"
   config.vm.network "forwarded_port", guest: 5000, host: 5000
-  config.vm.provision "shell", privileged: false, inline: <<-SHELL
+  config.vm.provision "shell", privileged: true, inline: <<-SHELL
     sudo apt-get update
-
-    # TODO: Install pyenv prerequisites
-    sudo apt-get install -y build-essential libssl-dev zlib1g-dev libbz2-dev \
-    libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
-    xz-utils tk-dev libffi-dev liblzma-dev python-openssl git
-
-    # TODO: Install pyenv
+    sudo apt-get -y install make build-essential libssl-dev zlib1g-dev \
+    libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm \
+    libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
+    
     rm -R -f ~/.pyenv
 
     git clone https://github.com/pyenv/pyenv.git ~/.pyenv
 
-    echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
-    echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
+    echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.profile
+    echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.profile
+    echo 'eval "$(pyenv init --path)"' >> ~/.profile
+    source ~/.profile
 
-    echo -e 'if command -v pyenv 1>/dev/null 2>&1; then\n  eval "$(pyenv init -)"\nfi' >> ~/.bashrc
+    pyenv install 3.8.7
+    pyenv global 3.8.7
 
-    exec "$SHELL"
+    curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+    
 
-    sudo apt-get update; sudo apt-get install --no-install-recommends make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
-
-    pyenv install --verbose 3.8.5
-
-    pyenv global 3.8.5
-
-    curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python
   SHELL
 
   config.trigger.after :up do |trigger|
     trigger.name = "Launching App"
-    trigger.info = "Running the TODO app setup script"
-    trigger.run_remote = {privileged: false, inline: "
+    trigger.info = "Running the TODO app setup script" 
+    trigger.run_remote = {privileged: true, inline: "
       cd /vagrant
-      lsof -i :5000
-      pkill flask
-      lsof -i :5000
       poetry install
-      poetry run flask run -h 0.0.0.0
+      poetry run gunicorn --daemon --error-logfile gunicorn_error.log --access-logfile gunicorn_access.log 'todo_app.app:create_app()' -b 0.0.0.0:5000
     "}
   end
-
 end
