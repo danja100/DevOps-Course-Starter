@@ -50,3 +50,27 @@ You should see output similar to the following:
  * Debugger PIN: 226-556-590
 ```
 Now visit [`http://localhost:5000/`](http://localhost:5000/) in your web browser to view the app.
+
+
+Vagrant 
+
+
+Docker 
+
+Install Docker
+    
+    https://www.docker.com/products/docker-desktop
+
+To build your Docker image run the following command in your terminal;
+    $ docker build --tag todo-app .
+
+To run your docker image run the following command in your terminal;
+
+    $ docker run --env-file ./.env -p 5000:5000 --mount type=bind,source="$(pwd)"/ todo_app,target=/app/todo_app todo-app 
+
+check that your iamge and container has been created using your docker desktop application. 
+
+   
+The container can either be run in a development or production container.
+
+
