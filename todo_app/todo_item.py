@@ -6,7 +6,7 @@ class TodoItem:
     def __init__(self, card):
         status = ""
 
-        if card["idList"] == os.getenv("LIST_ID_NOT_STARTED"):
+        if card["idList"] == os.getenv("LIST_ID_TO_DO"):
             status = "Not Started"
         if card["idList"] == os.getenv("LIST_ID_IN_PROGRESS"):
             status = "In Progress"
