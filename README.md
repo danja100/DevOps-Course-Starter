@@ -46,9 +46,10 @@ virtual box - https://www.virtualbox.org/
 vagrant - https://www.vagrantup.com 
 
 to run this app using vagrant:
-'''
-$ vagrant up
 
+```bash
+$ vagrant up
+```
 
 You should see output similar to the following:
 ```bash
