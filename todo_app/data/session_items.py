@@ -1,8 +1,11 @@
 from flask import session
+from dotenv import load_dotenv, find_dotenv
 import os
 import requests
 from todo_app.todo_item import TodoItem
 
+file_path = find_dotenv(".env")
+load_dotenv(file_path, override=True)
 
 _DEFAULT_ITEMS = [
     {"id": 1, "status": "Not Started", "title": "List saved todo items"},
@@ -61,7 +64,7 @@ def add_item(title):
     """
 
     url = f"https://api.trello.com/1/cards"
-    data = {"idList": os.getenv("LIST_ID_NOT_STARTED"), "name": title}
+    data = {"idList": os.getenv("LIST_ID_TO_DO"), "name": title}
     response = requests.post(url, data=data, params=query)
 
 
