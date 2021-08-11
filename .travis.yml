@@ -3,3 +3,10 @@ services:
 script:
 - docker build --target test --tag my-test-image .
 - docker run --env-file ./.env.test my-test-image
+notifications:
+  slack:
+    secure: cyERPfkzIAzILycLJGK/Pf7sKdOiK8cemP+PfhBYmMcimfHgd4EYhC8a6I5ChY13/h/H+0Nz2iTWsB3WUBzo+t5Zcxt2+hvf9Iy37ToCWHuw7iGBnJKesppFXT+0ilDBVVgls1pdi7eI6SwZsOv9enSZPBsF4VEpNeZiTPEJXG/RLIZ0UlWfMEOrDl/1wQld1wfpD1Ny+b3uajkRoVmJ1H7zcZcYqOe+gkIk87xgghNmilPW/YifDaB11YRi4gPJe1d5AQgFRs+3amdg+RTv9hw59nhsTy1HwB/bJ8UphoH0M7W1d3ohukLwSdT4TkPoXjGoXia9SGfWWEZi5CBtfnAbVeaTDyAOMpE4/kbu3w7/TbJdImN+JuibsEuYcClTKbgTwM6Dc6YpTpQgqFZw1ZT1QmMBiojcP0Mcp7X8EnR5vpYP67HnRTfdW8nBgyv1M0Lz3Ly6/nrLsX/WxJyo++84YRIR1PH3o42MN727DY0hjds1omDFCA2IGJ//FJc/DrBXJQ0aeMTMDs3Hgt15I1K8T374CJwjAKkf+zn7f1MB/J9H69xbzemG6MVOW4iL5d67lthLdazLuD3NS4aNTp53k5qEvBkgrVNnUrfc/FqYGSluUri/zKrT0bUkJXC9QDMKd2fJjGl4gs7Z55dfPpAspfL83W2r/L6N146s/q4=
+  email:
+    recipients:
+    - ravensmush@gmail.com
+    on_failure: always
