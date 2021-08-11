@@ -1,2 +1,5 @@
+services:
+- docker
 script:
-- echo "hello world"
+- docker build --target test --tag my-test-image .
+- docker run --env-file ./.env.test my-test-image
