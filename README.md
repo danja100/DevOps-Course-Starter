@@ -1,4 +1,4 @@
-DevOps Apprenticeship: Project Exercise
+# DevOps Apprenticeship: Project Exercise
 
 System Requirements
 
@@ -54,16 +54,26 @@ Install Docker
     
     https://www.docker.com/products/docker-desktop
 
-To build your Docker image run the following command in your terminal;
-    $ docker build --tag todo-app .
+**Development**
 
-To run your docker image run the following command in your terminal;
+To build:
+    
+    $ docker build --target development --tag todo-app:dev .
 
-    $ docker run --env-file ./.env -p 5000:5000 --mount type=bind,source="$(pwd)"/ todo_app,target=/app/todo_app todo-app 
+To run:
 
-check that your iamge and container has been created using your docker desktop application. 
+    $ docker run -d --env-file ./.env -p 5000:5000 --mount type=bind,source="$(pwd)"/todo_app,target=/app/todo_app todo-app:dev
 
-   
-The container can either be run in a development or production container.
+NB in development the app is run using the flask development server. A bind mount is also defined to allow the container to access the project directory on the host machine. 
 
+**Production**
 
+To build:
+    
+    $ docker build --target production --tag todo-app:prod .
+
+To run:
+
+    $ docker run -d --env-file ./.env -p 5000:5000 todo-app:prod
+
+NB in Production the app is run using a GUnicorn production server. 
