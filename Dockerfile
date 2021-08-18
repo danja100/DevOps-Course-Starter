@@ -11,7 +11,7 @@ COPY . /app
 
 WORKDIR /app 
 
-ENV PATH="${PATH}:/root/.poetry/bin"
+ENV PATH "$PATH:/root/.poetry/bin"
 
 RUN poetry install 
 
