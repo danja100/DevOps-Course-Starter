@@ -3,3 +3,4 @@ services:
   - docker
 script:
   - docker build --target testing --tag todo_app:test .
+  
