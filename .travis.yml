@@ -2,4 +2,4 @@ language: generic
 services:
   - docker
 script:
-  - docker build --target testing --todo_app:test .
+  - docker build --target testing --tag todo_app:test .
