@@ -1,2 +1,5 @@
+language: generic
+services:
+  - docker
 script:
-  - echo "hello world"
+  - docker build --target testing --todo_app:test .
