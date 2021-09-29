@@ -1,4 +1,5 @@
-.env 
+.dockerignore
+.env
 .env.template
 .env.test
 .git
@@ -6,6 +7,6 @@
 .pytest_cache
 .vagrant
 .vscode
-docker-compose.yml
 Dockerfile
 Vagrantfile
+
