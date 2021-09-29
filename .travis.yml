@@ -7,8 +7,8 @@ env:
   - secure: "DeZdqReBrzdfutM//dQZ8BgUnwKZhhI9e705d6uvMkhnjyG/xXcB3TJtg/2X7LAYH56wKaYIIoEztwAaC3z+HR/L/SDxPlsNHvMgj0JH111/oSdMAZ8dHT2Hs1FvvV6ZvFpAHD061ZrT0G++R5oBJ2tRKE15Mfpp2w5/PRsrFpxGc0r2Vu2/FOJhCINIScEMdlbYnn+EcoPoVy2W8V0dgt7vvYmshFKf87HD3YazyawGvscJSswH4oBejTA/cqu3kY1RrtgppXAulb4hlxnUkSEpB5UCLvXP0o/2cW+pxGrNDWZYCW7i+0ctGdDMN0jvu7UJ04kuvuzTsV5Lpp8zLdAdPSeOs1MNqqxaJVnBL1iuJjoIlIROq1BeyeaHWSihG7Ew4mM9M56MXrBBFoJ+JmceWyX+RpyEqjgPRbJnjYpkGn1fPUI3ubHXsqE+wczm/ABV1aexfyRQi2Y6dvYNcOK1UurG6sV7/8RDB+edq1crYyvDjMmYO50bw2hOmZT1RehppP2kuYucMUaChrwe341uELbslwfuUEhzn0sKlggK97vS04MbpZ8mPCdErIblfM5GHB2wdn4T2mJp+E20KEoLelhii62AxXWoC577f4bpTAG1sNJNUbZDlhCpCf3jmdCCLWXy19K40FN3EtjXMJiCpykUyweWRpiGQf5qGSo="
 script:
 - docker build --target test --tag my-test-image .
-- docker build --target production --tag $TRAVIS_COMMIT/todo-app:prod .
-- docker push $TRAVIS_COMMIT/todo-app:prod
+- docker build --target production --tag danja100/$TRAVIS_COMMIT:prod .
+- docker push danja100/$TRAVIS_COMMIT:prod 
 - docker run --env-file ./.env.test my-test-image
 notifications:
   slack:
