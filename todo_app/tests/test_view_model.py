@@ -13,10 +13,16 @@ def view_model():
     _DEFAULT_CARDS = [
         {
             "idShort": 1,
+<<<<<<< Updated upstream
             "idList": os.getenv("to_do_list"),
             "name": "List saved todo items",
             "dateLastActivity": '2021-06-18T11:27:41.098Z',
             "due": '2030-06-18T11:27:41.098Z'
+=======
+            "idList": os.getenv("LIST_ID_NOT_STARTED"),
+            "name": "To-Do items",
+            "dateLastActivity": "2021-04-21T09:59:06.065Z",
+>>>>>>> Stashed changes
         },
         {
             "idShort": 2,
