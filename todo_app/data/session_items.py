@@ -57,15 +57,11 @@ def add_item(title):
     """
     items = get_items()
     url = f"https://api.trello.com/1/cards"
-<<<<<<< Updated upstream
-    data = {"idList": os.getenv("to_do_list"), "name": title}
-    response = requests.request("POST", url, data=data, params=query)
-=======
+
     data = {"idList": os.getenv("LIST_ID_NOT_STARTED"), "name": title}
     response = requests.post(url, data=data, params=query)
->>>>>>> Stashed changes
 
-    
+
 def save_item(item):
     """
     Updates an existing item in the session. If no existing item matches the ID of the specified item, nothing is saved.
