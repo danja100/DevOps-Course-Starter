@@ -8,6 +8,7 @@ env:
 script:
 - docker build --target test --tag my-test-image .
 - docker build --target production --tag $TRAVIS_COMMIT/todo-app:prod .
+- docker push $TRAVIS_COMMIT/todo-app:prod
 - docker run --env-file ./.env.test my-test-image
 notifications:
   slack:
