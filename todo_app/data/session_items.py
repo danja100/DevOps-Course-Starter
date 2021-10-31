@@ -1,26 +1,14 @@
-from dotenv.main import find_dotenv, load_dotenv
 from flask import session
-import requests
+from dotenv import load_dotenv, find_dotenv
 import os
-import pprint
-from datetime import datetime
-from dateutil.parser import parse
 from todo_app.todo_item import TodoItem
+import pymongo
+from datetime import datetime
+import random
 
-# When running in production, we need to explicitly load the environment variables before they're used in this file
-file_path = find_dotenv(".env")
-load_dotenv(file_path, override=True)
-
-_DEFAULT_ITEMS = [
-    {"id": 1, "status": "Not Started", "title": "List saved todo items"},
-    {"id": 2, "status": "Not Started", "title": "Allow new items to be added"},
-]
-query = {
-    "key": os.getenv("Key"),
-    "token": os.getenv("Token"),
-}
-
-get_cards_url = f"https://api.trello.com/1/boards/{os.getenv('Board_ID')}/cards"
+def get_client():
+    connection_string = f"{os.getenv('MONGODB_PROTOCOL')}{os.getenv('MONGODB_USERNAME')}:{os.getenv('MONGODB_PASSWORD')}@{os.getenv('MONGODB_CLUSTER')}/{os.getenv('MONGODB_DB')}?retryWrites=true&w=majority"
+    return pymongo.MongoClient(connection_string)
 
 
 def get_items():
@@ -31,17 +19,28 @@ def get_items():
         list: The list of saved items.
     """
 
-    cards = requests.get(get_cards_url, params=query).json()
+    collection = get_client().todo_app.items
+
     items = []
-    for card in cards:
+    for card in collection.find():
         items.append(TodoItem(card))
+
     return items
 
 
 def get_item(id):
+    """
+    Fetches the saved item with the specified ID.
+
+    Args:
+        id: The ID of the item.
+
+    Returns:
+        item: The saved item, or None if no items match the specified ID.
+    """
     items = get_items()
     for item in items:
-        if item["id"] == int(id):
+        if item.id == int(id):
             return item
 
 
@@ -55,72 +54,35 @@ def add_item(title):
     Returns:
         item: The saved item.
     """
-    items = get_items()
-    url = f"https://api.trello.com/1/cards"
-<<<<<<< Updated upstream
-    data = {"idList": os.getenv("to_do_list"), "name": title}
-    response = requests.request("POST", url, data=data, params=query)
-=======
-    data = {"idList": os.getenv("LIST_ID_NOT_STARTED"), "name": title}
-    response = requests.post(url, data=data, params=query)
->>>>>>> Stashed changes
 
-    
-def save_item(item):
-    """
-    Updates an existing item in the session. If no existing item matches the ID of the specified item, nothing is saved.
-
-    Args:
-        item: The item to save.
-    """
-    existing_items = get_items()
-    updated_items = []
-    for existing_item in existing_items:
-        if item["id"] == existing_item["id"]:
-            updated_items.append(item)
-        else:
-            updated_items.append(existing_item)
-    session["items"] = updated_items
-    return item
+    data = {
+        "status": "Not Started",
+        "name": title,
+        "dateLastActivity": datetime.now(),
+        "id": random.randint(0, 1000),
+    }
+    collection = get_client.todo_app.items
+    collection.insert_one(data)
 
 
-def delete_item(item_id):
-    cards = requests.get(get_cards_url, params=query).json()
-    for card in cards:
-        if card["idShort"] == int(item_id):
-            id = card["id"]
-            url = f"https://api.trello.com/1/cards/{id}"
-            response = requests.delete(url, params=query)
+def delete_item(item):
+    collection = get_client.todo_app.items
+    for card in collection.find():
+        if item.id == card["id"]:
+            collection.delete_one(card)
 
 
-def update_status(string_select_update, item_id):
-    cards = requests.get(get_cards_url, params=query).json()
-    for card in cards:
-        if string_select_update == "In-Progress":
-            if card["idShort"] == int(item_id):
-                id = card["id"]
-                url = f"https://api.trello.com/1/cards/{id}"
-                data = {"idList": os.getenv("in_progress_list")}
-                response = requests.put(url, data=data, params=query)
-        if string_select_update == "To-Do":
-            if card["idShort"] == int(item_id):
-                id = card["id"]
-                url = f"https://api.trello.com/1/cards/{id}"
-                data = {"idList": os.getenv("to_do_list")}
-                response = requests.put(url, data=data, params=query)
-        if string_select_update == "Complete":
-            if card["idShort"] == int(item_id):
-                id = card["id"]
-                url = f"https://api.trello.com/1/cards/{id}"
-                data = {"idList": os.getenv("complete_list")}
-                response = requests.put(url, data=data, params=query)
+def mark_in_progress(item):
+    collection = get_client.todo_app.items
+    for card in collection.find():
+        if item.id == card["id"]:
+            newvalues = {"$set": {"status": "In Progress"}}
+            collection.update_one(card, newvalues)
 
 
-def due_date(item_id, due_date_update):
-    cards = requests.get(get_cards_url, params=query).json()
-    for card in cards:
-        if card["idShort"] == int(item_id):
-            id = card["id"]
-            url = f"https://api.trello.com/1/cards/{id}"
-            data = {"due": due_date_update}
-            response = requests.put(url, data=data, params=query)
+def mark_complete(item):
+    collection = get_client.todo_app.items
+    for card in collection.find():
+        if item.id == card["id"]:
+            newvalues = {"$set": {"status": "Done"}}
+            collection.update_one(card, newvalues)
